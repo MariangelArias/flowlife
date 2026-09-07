@@ -1,0 +1,70 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+
+<section class="stats-shell">
+    <div class="stats-page-head">
+        <div>
+            <p class="detail-eyebrow">Estadísticas</p>
+            <h1>Estadísticas semanales</h1>
+            <p>Selecciona una semana para ver su gráfico de carga y comparación con las demás.</p>
+            {% if es_admin %}
+                <p style="color: var(--muted); margin-top: 8px;">Modo administrador: consulta global sin edición.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="stats-metrics">
+        <div class="stats-metric">
+            <span>Total de actividades</span>
+            <strong>{{ stats.total }}</strong>
+        </div>
+        <div class="stats-metric">
+            <span>Pendientes</span>
+            <strong>{{ stats.pendientes }}</strong>
+        </div>
+        <div class="stats-metric">
+            <span>Completadas</span>
+            <strong>{{ stats.completadas }}</strong>
+        </div>
+    </div>
+
+    <section class="stats-card">
+        <div class="detail-panel-head">
+            <div>
+                <h2 id="stats-week-label">{{ selected_week.week_label }}</h2>
+                <p id="stats-week-summary">{{ selected_week.summary }}</p>
+            </div>
+            <div>
+                <p style="margin: 0; color: var(--muted);">Promedio semanal</p>
+                <strong id="stats-week-average">{{ selected_week.average }}</strong>
+            </div>
+        </div>
+
+        <div class="week-selector" style="margin-top: 16px;">
+            {% for week in weeks %}
+                <button
+                    type="button"
+                    data-week-button
+                    data-week="{{ week.start_iso }}"
+                    class="{% if week.start_iso == selected_week_start %}is-active{% endif %}"
+                >
+                    {{ week.label }}
+                </button>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="stats-chart-card">
+        <canvas id="statsChart"></canvas>
+    </section>
+   
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="/static/js/app.js?v=20260701"></script>
+{% endblock %}

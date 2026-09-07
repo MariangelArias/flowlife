@@ -1,0 +1,85 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>FlowLife - Registro</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body class="login-body">
+
+<div class="login-container">
+
+    <!-- Lado izquierdo -->
+    <div class="login-left">
+
+        <h1>🌿 FlowLife</h1>
+
+        <p>
+            Crea tu cuenta y empieza a organizar tus tareas,
+            alcanzar tus metas y mejorar tu productividad.
+        </p>
+
+    </div>
+
+    <!-- Lado derecho -->
+    <div class="login-right">
+
+        <form method="POST" class="login-form">
+
+            {% csrf_token %}
+
+            <h2>Crear cuenta</h2>
+
+            <label>
+                Usuario
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Ingresa un usuario"
+                    required
+                >
+            </label>
+
+            <label>
+                Correo electrónico
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="correo@ejemplo.com"
+                    required
+                >
+            </label>
+
+            <label>
+                Contraseña
+                <input type="password" name="password1" placeholder="••••••••" required>
+            </label>
+
+            <label>
+                Confirmar contraseña
+                <input type="password" name="password2" placeholder="••••••••" required>
+            </label>
+
+            <button type="submit">
+                Crear cuenta
+            </button>
+
+            <p class="register-link">
+                ¿Ya tienes una cuenta?
+                <a href="{% url 'login' %}">
+                    Inicia sesión
+                </a>
+            </p>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

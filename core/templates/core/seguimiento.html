@@ -1,0 +1,72 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+<h1>Seguimiento semanal</h1>
+
+<div class="weekly-tracking">
+
+    {% if not es_admin %}
+    <div class="weekly-tracking-head">
+        <div>
+            <h3>Selecciona tu nivel de carga por día</h3>
+            <p>Marca las estrellas y revisa abajo cómo se ve la semana completa.</p>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if not es_admin %}
+    <form method="POST" action="/tracking/guardar/" class="weekly-tracking-form">
+        {% csrf_token %}
+
+        <div class="weekly-grid">
+
+            {% for day in week_days %}
+            <div class="week-day-card">
+                <div class="week-day-head">
+                    <strong>{{ day.label }}</strong>
+                    <small>{{ day.display }}</small>
+                </div>
+
+                <div class="stars-row">
+                    {% for star in star_range %}
+                    <label class="star-option">
+                        <input type="radio"
+                            name="stars_{{ day.iso }}"
+                            value="{{ star }}"
+                            {% if day.stars == star %}checked{% endif %}>
+                        <span>★</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+
+        <button type="submit">Guardar</button>
+    </form>
+    {% else %}
+    <div class="stats-card" style="margin-top: 16px;">
+        <strong>Modo administrador</strong>
+        <p style="margin: 8px 0 0; color: var(--muted);">Solo lectura. Puedes revisar la carga semanal, pero no editar el seguimiento.</p>
+    </div>
+    {% endif %}
+
+    <div class="chart-container weekly-chart-block">
+        <div class="chart-header">
+            <div>
+                <h3>Carga semanal</h3>
+            </div>
+        </div>
+        <canvas id="weeklyChart"></canvas>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="/static/js/app.js?v=20260701"></script>
+{% endblock %}

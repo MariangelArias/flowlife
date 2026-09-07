@@ -1,0 +1,111 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlowLife</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    <div class="app">
+        <button
+            class="sidebar-toggle"
+            id="sidebarToggle"
+            type="button"
+            aria-label="Abrir o cerrar el sidebar"
+            aria-controls="sidebar"
+            aria-expanded="false"
+        >
+            ☰
+        </button>
+        <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+        <aside class="sidebar" id="sidebar">
+            <div>
+                <div class="logo">
+                    <div class="logo-circle">🌿</div>
+                    <div>
+                        <h2>FlowLife</h2>
+                        <small>Tu tablero personal</small>
+                    </div>
+                </div>
+
+                <nav class="menu">
+                    <a href="{% url 'dashboard' %}"> Inicio</a>
+                    <a href="{% url 'actividades' %}"> Actividades</a>
+                    <a href="{% url 'seguimiento' %}"> Seguimiento</a>
+                    <a href="{% url 'estadisticas' %}"> Estadísticas</a>
+                    {% if not request.user.is_staff %}
+                        <a href="{% url 'ruleta' %}">¿No sabes qué hacer hoy?</a>
+                    {% endif %}
+                </nav>
+            </div>
+
+            <div class="sidebar-user">
+                <div>
+                    <small>Sesión activa</small>
+                    <strong>{{ request.user.username }}</strong>
+                </div>
+                <a class="logout" href="{% url 'logout' %}">↩</a>
+            </div>
+        </aside>
+
+        <div class="content">
+            <header class="topbar">
+                <h1>FlowLife</h1>
+                <span>Organiza actividades, seguimiento y estadísticas en un solo lugar</span>
+            </header>
+
+            <main class="page-content">
+                {% block content %}{% endblock %}
+
+            </main>
+
+            <script src="{% static 'js/app.js' %}"></script>
+
+        </div>
+    </div>
+    <script>
+        (() => {
+            const app = document.querySelector('.app');
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.getElementById('sidebarToggle');
+            const backdrop = document.getElementById('sidebarBackdrop');
+
+            if (!app || !sidebar || !toggle || !backdrop) return;
+
+            const setSidebarState = (isOpen) => {
+                app.classList.toggle('sidebar-open', isOpen);
+                toggle.setAttribute('aria-expanded', String(isOpen));
+                backdrop.hidden = !isOpen;
+            };
+
+            toggle.addEventListener('click', () => {
+                setSidebarState(!app.classList.contains('sidebar-open'));
+            });
+
+            backdrop.addEventListener('click', () => setSidebarState(false));
+
+            sidebar.addEventListener('click', (event) => {
+                if (event.target.closest('a')) {
+                    setSidebarState(false);
+                }
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    setSidebarState(false);
+                }
+            });
+
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 900) {
+                    setSidebarState(false);
+                }
+            });
+        })();
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

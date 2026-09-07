@@ -1,0 +1,61 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>FlowLife</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body class="login-body">
+
+<div class="login-container">
+
+    <div class="login-left">
+
+        <h1>🌿 FlowLife</h1>
+
+        <p>
+            Organiza tus tareas, mantén el enfoque y mejora tu productividad
+            con un tablero intuitivo, estadísticas y herramientas que te
+            ayudarán a cumplir tus metas.
+        </p>
+
+    </div>
+
+   <div class="login-right">
+
+    <div class="landing-actions">
+
+        <h2>¡Bienvenido!</h2>
+
+        <p>Comienza ahora mismo.</p>
+
+        <div class="landing-buttons">
+
+            <button type="button"
+                    onclick="window.location.href='{% url 'login' %}'">
+                Iniciar sesión
+            </button>
+
+            <button type="button"
+                    onclick="window.location.href='{% url 'register' %}'">
+                Crear cuenta
+            </button>
+
+        </div>
+
+    </div>
+
+</div> 
+
+    </div>
+
+</div>
+
+</div>
+
+</body>
+</html>

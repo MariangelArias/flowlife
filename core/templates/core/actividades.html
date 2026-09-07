@@ -1,0 +1,167 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+{% if not es_admin %}
+<div class="quick-form">
+    <form method="POST" action="/crear/">
+        {% csrf_token %}
+
+        <div class="quick-form-copy">
+            <p class="quick-form-kicker">Nueva tarea</p>
+            <h2>Crea algo concreto para avanzar hoy</h2>
+        </div>
+
+        <label class="quick-form-field">
+            <span>Nombre de la tarea</span>
+            <input type="text" name="titulo" placeholder="Escribe el nombre de la tarea" required>
+        </label>
+
+        <label class="quick-form-field">
+            <span>Tipo de tarea</span>
+            <select name="tipo">
+                <option value="ESTUDIO">Estudio</option>
+                <option value="HABITO">Hábito</option>
+                <option value="TRABAJO">Trabajo</option>
+                <option value="EVENTO">Evento</option>
+            </select>
+        </label>
+
+        <button type="submit">Crear tarea</button>
+    </form>
+</div>
+{% else %}
+<section class="detail-hint">
+    <h1>Vista de administración</h1>
+    <p>Solo puedes revisar tareas y su propietario. La creación y edición están deshabilitadas.</p>
+</section>
+{% endif %}
+
+<section class="detail-hint">
+    <h1>Actividades</h1>
+    <p>
+        {% if es_admin %}
+            Haz click en una tarea para revisar su ficha en modo lectura.
+        {% else %}
+            Haz click en una tarea para abrir su ficha y actualizar su progreso individual.
+        {% endif %}
+    </p>
+</section>
+
+<div class="board" id="activities-board">
+
+    
+    <div class="column" data-estado="PENDIENTE">
+        <h2>Pendiente</h2>
+
+        {% for a in pendientes %}
+            <div class="card activity-card-link"
+                 draggable="true"
+                 data-id="{{ a.id }}"
+                 data-estado="{{ a.estado }}"
+                 data-url="{% url 'actividad_detalle' a.id %}">
+
+                <div class="card-head">
+                    <strong>{{ a.titulo }}</strong>
+                    <span class="private-progress-label">{{ a.progreso }}%</span>
+                </div>
+
+                <p>{{ a.tipo }}</p>
+
+                {% if es_admin %}
+                    <div class="task-owner">Propietario: {{ a.propietario }}</div>
+                {% endif %}
+
+                <div class="card-progress">
+                    <span style="width: {{ a.progreso }}%"></span>
+                </div>
+
+                <small>
+                    {% if es_admin %}Click para revisar{% else %}Click para editar{% endif %}
+                </small>
+
+            </div>
+        {% empty %}
+            <p>No hay tareas</p>
+        {% endfor %}
+    </div>
+
+    
+    <div class="column" data-estado="PROGRESO">
+        <h2>En progreso</h2>
+
+        {% for a in progreso %}
+            <div class="card activity-card-link"
+                 draggable="true"
+                 data-id="{{ a.id }}"
+                 data-estado="{{ a.estado }}"
+                 data-url="{% url 'actividad_detalle' a.id %}">
+
+                <div class="card-head">
+                    <strong>{{ a.titulo }}</strong>
+                    <span class="private-progress-label">{{ a.progreso }}%</span>
+                </div>
+
+                <p>{{ a.tipo }}</p>
+
+                {% if es_admin %}
+                    <div class="task-owner">Propietario: {{ a.propietario }}</div>
+                {% endif %}
+
+                <div class="card-progress">
+                    <span style="width: {{ a.progreso }}%"></span>
+                </div>
+
+                <small>
+                    {% if es_admin %}Click para revisar{% else %}Click para editar{% endif %}
+                </small>
+
+            </div>
+        {% empty %}
+            <p>No hay tareas</p>
+        {% endfor %}
+    </div>
+
+   
+    <div class="column" data-estado="COMPLETADO">
+        <h2>Completado</h2>
+
+        {% for a in completadas %}
+            <div class="card activity-card-link"
+                 draggable="true"
+                 data-id="{{ a.id }}"
+                 data-estado="{{ a.estado }}"
+                 data-url="{% url 'actividad_detalle' a.id %}">
+
+                <div class="card-head">
+                    <strong>{{ a.titulo }}</strong>
+                    <span class="private-progress-label">{{ a.progreso }}%</span>
+                </div>
+
+                <p>{{ a.tipo }}</p>
+
+                {% if es_admin %}
+                    <div class="task-owner">Propietario: {{ a.propietario }}</div>
+                {% endif %}
+
+                <div class="card-progress">
+                    <span style="width: {{ a.progreso }}%"></span>
+                </div>
+
+                <small>
+                    {% if es_admin %}Click para revisar{% else %}Click para editar{% endif %}
+                </small>
+
+            </div>
+        {% empty %}
+            <p>No hay tareas</p>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/app.js?v=20260701"></script>
+{% endblock %}

@@ -1,0 +1,203 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="dashboard-shell">
+    <div class="dashboard-container">
+
+{% if mostrar_scratch %}
+<div id="scratchModal" class="scratch-modal">
+
+    <div class="scratch-card">
+
+        <button id="closeScratch" class="scratch-close">✕</button>
+
+        <div class="scratch-header">
+            Tu motivación del día
+        </div>
+
+        <div class="scratch-area">
+            <div class="phrase" id="phrase"></div>
+            <canvas id="scratchCanvas"></canvas>
+        </div>
+
+        <small>Raspa para descubrir tu frase</small>
+
+    </div>
+</div>
+{% endif %}
+
+<div class="dashboard-hero">
+
+    
+    <div>
+        <p class="detail-eyebrow">Dashboard</p>
+
+        <h1>Tablero de trabajo</h1>
+
+        <p>
+            {% if es_admin %}
+                Vista global para administrar todas las tareas del sistema.
+            {% else %}
+                Vista personal enfocada en tus propias tareas y progreso.
+            {% endif %}
+        </p>
+    </div>
+
+    <div class="dashboard-role-pill {% if es_admin %}is-admin{% else %}is-user{% endif %}">
+        {{ rol_label }}
+    </div>
+
+</div>
+
+<div class="stats">
+
+    <div class="stat-card">
+        <h3>Total</h3>
+        <p id="total">{{ stats.total }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Pendientes</h3>
+        <p id="pendientes-count">{{ stats.pendientes }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Completadas</h3>
+        <p id="completadas-count">{{ stats.completadas }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Progreso</h3>
+        <p id="porcentaje">{{ porcentaje }}%</p>
+    </div>
+
+</div>
+
+<section class="dashboard-board board"
+         id="dashboard-board"
+         data-readonly="{% if es_admin %}1{% else %}0{% endif %}">
+
+    <div class="column dashboard-column" data-estado="PENDIENTE">
+
+        <div class="dashboard-column-head">
+            <h2>Pendiente</h2>
+            <span>{{ pendientes_tareas|length }}</span>
+        </div>
+
+        {% if pendientes_tareas %}
+            {% for actividad in pendientes_tareas %}
+            <article class="card dashboard-card">
+
+                <div class="card-head">
+                    <strong>{{ actividad.titulo }}</strong>
+                    <span class="private-progress-label">
+                        {{ actividad.get_estado_display }}
+                    </span>
+                </div>
+
+                <p>{{ actividad.tipo }}</p>
+
+                {% if es_admin %}
+                <div class="task-owner">
+                    Propietario:
+                    {{ actividad.usuario.get_full_name|default:actividad.usuario.username }}
+                </div>
+                {% endif %}
+
+                <small class="task-meta">{{ actividad.fecha }}</small>
+
+            </article>
+            {% endfor %}
+        {% else %}
+            <div class="kanban-empty">Sin tareas pendientes.</div>
+        {% endif %}
+
+    </div>
+
+    <div class="column dashboard-column" data-estado="PROGRESO">
+
+        <div class="dashboard-column-head">
+            <h2>En progreso</h2>
+            <span>{{ progreso_tareas|length }}</span>
+        </div>
+
+        {% if progreso_tareas %}
+            {% for actividad in progreso_tareas %}
+            <article class="card dashboard-card">
+
+                <div class="card-head">
+                    <strong>{{ actividad.titulo }}</strong>
+                    <span class="private-progress-label">
+                        {{ actividad.get_estado_display }}
+                    </span>
+                </div>
+
+                <p>{{ actividad.tipo }}</p>
+
+                {% if es_admin %}
+                <div class="task-owner">
+                    Propietario:
+                    {{ actividad.usuario.get_full_name|default:actividad.usuario.username }}
+                </div>
+                {% endif %}
+
+                <small class="task-meta">{{ actividad.fecha }}</small>
+
+            </article>
+            {% endfor %}
+        {% else %}
+            <div class="kanban-empty">Sin tareas en progreso.</div>
+        {% endif %}
+
+    </div>
+
+    <div class="column dashboard-column" data-estado="COMPLETADO">
+
+        <div class="dashboard-column-head">
+            <h2>Completado</h2>
+            <span>{{ completadas_tareas|length }}</span>
+        </div>
+
+        {% if completadas_tareas %}
+            {% for actividad in completadas_tareas %}
+            <article class="card dashboard-card done">
+
+                <div class="card-head">
+                    <strong>{{ actividad.titulo }}</strong>
+                    <span class="private-progress-label">
+                        {{ actividad.get_estado_display }}
+                    </span>
+                </div>
+
+                <p>{{ actividad.tipo }}</p>
+
+                {% if es_admin %}
+                <div class="task-owner">
+                    Propietario:
+                    {{ actividad.usuario.get_full_name|default:actividad.usuario.username }}
+                </div>
+                {% endif %}
+
+                <small class="task-meta">{{ actividad.fecha }}</small>
+
+            </article>
+            {% endfor %}
+        {% else %}
+            <div class="kanban-empty">Sin tareas completadas.</div>
+        {% endif %}
+
+    </div>
+
+</section>
+ </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+<script src="{% static 'js/app.js' %}?v=20260702"></script>
+
+{% endblock %}
