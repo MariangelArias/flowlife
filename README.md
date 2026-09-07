@@ -1,43 +1,43 @@
 # FlowLife
 
-FlowLife is a Django application for personal task tracking, weekly mood tracking, and activity progress management.
+FlowLife es una aplicación Django para gestión de tareas personales, seguimiento semanal del estado de ánimo y control del progreso de actividades.
 
-## Features
+## Funcionalidades
 
-- User authentication and registration
-- Personal task dashboard
-- Weekly mood tracking
-- Activity progress tracking
-- Admin-facing read-only overview of user tasks
+- Registro e inicio de sesión de usuarios
+- Panel personal de tareas
+- Seguimiento semanal del estado de ánimo
+- Seguimiento del progreso de actividades
+- Vista de solo lectura para administradores sobre las tareas de los usuarios
 
-## Requirements
+## Requisitos
 
-- Python 3.11+
-- Django and the packages listed in `requirements.txt`
+- Python 3.11 o superior
+- Django y los paquetes listados en `requirements.txt`
 
-## Setup
+## Instalación
 
-1. Create and activate a virtual environment.
-2. Install dependencies:
+1. Crea y activa un entorno virtual.
+2. Instala las dependencias:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-3. Create a `.env` file from `.env.example` and fill in the values.
-4. Run migrations:
+3. Crea un archivo `.env` a partir de `.env.example` y completa los valores.
+4. Ejecuta las migraciones:
 
    ```bash
    python manage.py migrate
    ```
 
-5. Start the development server:
+5. Inicia el servidor de desarrollo:
 
    ```bash
    python manage.py runserver
    ```
 
-## Environment variables
+## Variables de entorno
 
 - `DJANGO_SECRET_KEY`
 - `DJANGO_DEBUG`
@@ -49,8 +49,8 @@ FlowLife is a Django application for personal task tracking, weekly mood trackin
 - `DJANGO_DB_HOST`
 - `DJANGO_DB_PORT`
 
-## Security notes
+## Notas de seguridad
 
-- Do not commit `.env` files.
-- Do not commit local database files such as `db.sqlite3`.
-- Keep production secrets out of source control and inject them through environment variables.
+- No subas archivos `.env`.
+- No subas bases de datos locales como `db.sqlite3`.
+- Mantén los secretos de producción fuera del control de versiones y cárgalos mediante variables de entorno.
